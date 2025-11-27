@@ -1,0 +1,40 @@
+# Composer
+/vendor/
+composer.lock
+
+# Environment variables
+.env
+.env.*.local
+
+# IDE-specific files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+
+# Operating System files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Log files
+*.log
+/storage/logs/*.log
+
+# Cache directories
+/storage/framework/cache/
+/storage/framework/sessions/
+/storage/framework/views/
+/bootstrap/cache/
+
+# Build artifacts
+/public/build/
+/node_modules/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*~
