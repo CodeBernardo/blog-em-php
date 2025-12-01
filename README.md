@@ -1,4 +1,4 @@
-# Blog PHP – Conceitos Básicos
+## Blog PHP – Conceitos Básicos
 
 Pequeno projeto em PHP usado para estudar conceitos fundamentais da linguagem.
 O arquivo `index.php` inicializa a aplicação, carrega as funções em
@@ -23,7 +23,7 @@ O arquivo `index.php` inicializa a aplicação, carrega as funções em
 
 ## Próximos passos sugeridos
 
-- Adicionar exemplos de arrays, laços e orientação a objetos.
+- Adicionar exemplos de orientação a objetos (classes, propriedades, métodos, herança).
 - Criar testes simples demonstrando boas práticas com PHP Unit (`phpunit`).
 - Complementar a documentação com prints/explicações das funções criadas.
 
