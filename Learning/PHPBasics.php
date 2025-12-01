@@ -1,63 +1,71 @@
 <?php
-declare(strict_types=1); // tipagem forte, Default(0) ✔️ (correta - obriga tipos estritos nos parâmetros de funções, disponível a partir do PHP 7.0)
+/**
+ * ==========================================
+ *         SUMÁRIO DAS LIÇÕES DE PHP
+ * ==========================================
+ * 
+ * 1. Tipagem Estrita e Declarações Iniciais
+ * 2. Sintaxe para Funções e Concatenamento de Strings
+ * 3. Variáveis e Tipos de Dados Primitivos
+ * 4. Constantes (define, const) – Características e Diferenças
+ * 5. Estruturas Condicionais (if, switch, ternário, match)
+ * 6. Operadores Lógicos e Tabela de Precedência
+ * 7. Filtros de Validação e Sanitização (filter_var, callbacks)
+ * 8. Informações do Servidor e Navegação (URL base, rotas)
+ * 9. Arrays: Criação e Iteração (formas, foreach)
+ * 10. Slugs: Como gerar e para que servem em URLs
+ * 11. Estruturas de Repetição (while, do...while, for, foreach)
+ * 
+ * Cada tópico traz exemplos de código e explicações práticas!
+ */
+
+// === 1. Tipagem Estrita ===
+declare(strict_types=1); // tipagem forte, Default(0) ✔️ 
 
 use PSpell\Dictionary;
 
-function concatString(string $param1, ?string $param2): string // sintaxe para funcoes ✔️ (correta - declara função tipada em PHP)
+// === 2. Funções e Concatenamento ===
+function concatString(string $param1, ?string $param2): string 
 {
-    // return $param1 . " " . $param2; // concatenançao de textos, o simbolo + so serve para numeros ✔️ (correta - o operador . concatena strings, + é só para números)
+    // return $param1 . " " . $param2; // concatenançao de textos
 
     /*
         $mensagem = $param1;
         $mensagem .= " ";
         $mensagem .= $param2;
         return $mensagem;
-    */ // ✔️ (forma alternativa correta de concatenar strings usando .=)
+    */ // alternativa com .=
 
-    //Interpolacao ✔️ (correta - é possível fazer interpolação de variáveis dentro de aspas duplas)
+    //Interpolacao
     return "$param1 $param2";
-    // return "{$param1} {$param2}"; // ✔️ (também correta, outra sintaxe de interpolação)
-
-    // HEREDOC -> para textos grandes, templates HTML e emails ✔️ (correta - HEREDOC é útil para strings grandes, HTML, etc)
+    // return "{$param1} {$param2}"; // Outra forma de interpolação
+    // HEREDOC pode ser usado para textos longos/templates HTML
     // return <<<HTML
     // <p>$param1 $param2</p>
     // HTML;
 }
 
-//variaveis 
-$variavel = "..."; // sintaxe para variaveis ✔️ (correta - declaração de variável em PHP)
+// === 3. Variáveis e Tipos ===
+$variavel = "..."; // variavel
+$string = "";      // string
+$int = 1;          // inteiro
+$bool = true;      // booleano
+$float = 1.99;     // ponto flutuante
+$null = null;      // null
+var_dump($string); // debug: tipo e valor
 
-// tipos de dados
-$string = "";      // ✔️ string
-$int = 1;          // ✔️ inteiro
-$bool = true;      // ✔️ booleano
-$float = 1.99;     // ✔️ ponto flutuante
-$null = null;      // ✔️ null
-var_dump($string); // para debug, printa o tipo e o valor da variavel ✔️ (correta - var_dump mostra tipo e valor)
-
-//Contantes
-
-// define() é uma função usada para criar constantes no PHP em tempo de execução.
-// Sintaxe: define("NOME_DA_CONSTANTE", valor, bool $case_insensitive = false)
-// Por padrão, as constantes definidas por define não são sensíveis a maiúsculas e minúsculas no PHP 7.3 ou inferior
-// (mas a partir do PHP 7.4, o parâmetro $case_insensitive foi descontinuado e só é permitido criar constantes sensíveis a maiúsculas/minúsculas).
-
-define("FOO", "bar"); // Define a constante FOO com valor "bar"
+// === 4. Constantes ===
+define("FOO", "bar"); // Constante runtime
 echo FOO;
 $name = "exemplo";
-define("EXAMPLE", $name); // constantes definidas por define só podem ser acessadas globalmente  
+define("EXAMPLE", $name); // define é sempre global
+const FOO2 = "Bar"; // Constante compilada
 
-// const é outra forma de definir constantes no PHP, mas deve ser usada somente no escopo global ou dentro de classes.
-// A principal diferença: const é avaliada em tempo de compilação. Além disso, só aceita valores escalares conhecidos em tempo de escrita do código.
-const FOO2 = "Bar"; // Outra forma de criar uma constante (não pode ser usada dinamicamente)
+// Resumo:
+// - define(): qualquer ponto do código, valor dinâmico, mas não em classes.
+// - const: topo do código/classe, valor constante no momento de declaração.
 
-// Resumindo:
-// - define() pode ser usado em qualquer ponto do código (exceto fora do escopo em classes) e valores podem ser definidos dinamicamente.
-// - const só pode ser usado no escopo de topo (global ou direto dentro de classes) e sempre requer um valor conhecido no momento da declaração.
-// Ambos os métodos criam valores imutáveis que duram até o final da execução do script.
-
-// Condicionais 
-// Exemplo com if/elseif/else (controle de fluxo clássico)
+// === 5. Estruturas Condicionais ===
 function saudacao(int $time): string
 {
     if ($time < 0 || $time > 23) {
@@ -69,10 +77,10 @@ function saudacao(int $time): string
     } elseif (($time >= 0 && $time < 5) || ($time >= 20 && $time <= 23)) {
         return "Boa Noite!";
     }
-    // Em caso de alguma falha lógica imprevista
     return "Formato de hora inválido";
 }
 
+// Switch
 function saudacaoSwitch(int $time): string
 {
     switch (true) {
@@ -89,7 +97,8 @@ function saudacaoSwitch(int $time): string
     }
 }
 
-function saudacaoTernario(int $time): string // PHP 4+
+// Ternário
+function saudacaoTernario(int $time): string
 {
     return ($time < 0 || $time > 23) ? "Formato de hora inválido" :
         (($time >= 5 && $time <= 12) ? "Bom dia!" :
@@ -97,7 +106,8 @@ function saudacaoTernario(int $time): string // PHP 4+
                 ((($time >= 0 && $time < 5) || ($time >= 20 && $time <= 23)) ? "Boa Noite!" : "Formato de hora inválido")));
 }
 
-function saudacaoMatch(int $time): string // PHP 8+
+// Match (PHP 8+)
+function saudacaoMatch(int $time): string
 {
     return match (true) {
         $time < 0 || $time > 23 => "Formato de hora inválido",
@@ -108,126 +118,75 @@ function saudacaoMatch(int $time): string // PHP 8+
     };
 }
 
-// Tabela de operadores lógicos em PHP:
-// | Operador | Nome | Precedência | Uso               | Observação                                                                                   |
-// |----------|------|-------------|-------------------|----------------------------------------------------------------------------------------------|
-// | &&       | AND  | Alta        | Mais comum        | Usado em expressões lógicas, recomendado na maioria dos casos; avalia ambos os lados sempre. |
-// | and      | AND  | Baixa       | Controle de fluxo | Cuidado: precedência baixa; útil em atribuições condicionais, pode causar confusão.          |
-// | ||       | OR   | Alta        | Mais comum        | Usado para verificar se pelo menos uma condição é verdadeira; avalia ambos os lados.         |
-// | or       | OR   | Baixa       | Controle de fluxo | Cuidado: precedência baixa; usado em comandos condicionais, pode gerar ambiguidades.         |
-// | xor      | XOR  | Média       | Pouco usado       | “Ou exclusivo”; verdadeiro se apenas um dos lados for verdadeiro.                            |
-// | !        | NOT  | Alta        | Negação           | Nega o valor de uma expressão (verdadeiro para falso e vice-versa).                          |
+// === 6. Operadores Lógicos (Tabela) ===
+//
+// | Operador | Nome | Precedência | Uso               | Observação                                                  |
+// |----------|------|-------------|-------------------|-------------------------------------------------------------|
+// | &&       | AND  | Alta        | Mais comum        | Avalia ambos os lados sempre.                               |
+// | and      | AND  | Baixa       | Controle de fluxo | Precedência baixa; cuidado com atribuições condicionais.    |
+// | ||       | OR   | Alta        | Mais comum        | Usa para testar pelo menos uma condição.                    |
+// | or       | OR   | Baixa       | Controle de fluxo | Cuidado em atribuições, preferência para && e ||.           |
+// | xor      | XOR  | Média       | Pouco usado       | Verdadeiro se apenas um lado for verdadeiro.                |
+// | !        | NOT  | Alta        | Negação           | Inverte o valor lógico da expressão.                        |
 // 
-// Atenção: Precedência define a ordem em que os operadores são avaliados em uma expressão com múltiplos operadores. 
-// Por exemplo, operadores com precedência alta (como && ou ||) são avaliados antes dos operadores com precedência baixa (como and ou or).
-// Isso pode alterar o resultado de uma expressão se não for respeitado – em situações ambíguas, use parênteses para garantir o comportamento esperado!
+// *Atenção à ordem de avaliação: use parênteses para garantir o resultado esperado!*
 
-//FILTROS
-// Filtros no PHP são usados principalmente para validar e/ou sanitizar variáveis, como entradas de formulários.
-// A função filter_var() recebe um valor e um tipo de filtro, e retorna o valor filtrado ou false (em caso de falha).
-// Exemplos comuns incluem validação de e-mails, URLs, inteiros, etc.
+// === 7. Filtros de Validação e Sanitização ===
 
-// A função filter_var é extremamente útil no PHP para validação e sanitização de dados vindos de fontes externas, como formulários ou requisições.
-// Ela reduz riscos de falhas de segurança e de dados inválidos, pois permite aplicar filtros prontos ou personalizados de forma padronizada.
-// O filter_var retorna o valor filtrado, ou false se a validação falhar (por exemplo, se o e-mail for inválido).
-
+// Validar e-mail
 function validateEmail(string $email): bool
 {
-    // Aqui usamos filter_var com FILTER_VALIDATE_EMAIL para verificar se o e-mail está em um formato válido.
-    // Isso previne que valores inapropriados sejam processados como e-mail.
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
 
-// Outros exemplos práticos do uso de filter_var:
-
-// Sanitizar uma string removendo tags perigosas (evita XSS e outros ataques):
-// FILTER_SANITIZE_STRING está deprecated desde o PHP 8.1, então utilize strip_tags() + trim() para limpar a string:
+// Exemplo de sanitização (o FILTER_SANITIZE_STRING está deprecated):
 $nomeLimpo = trim(strip_tags($nome));
 
-// Validar inteiros dentro de um determinado intervalo:
+// Validar inteiro no intervalo
 $numero = filter_var($input, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 100]]);
-// Só retorna o valor se estiver entre 1 e 100; caso contrário, retorna false.
 
-// Verificar se a entrada é uma URL válida:
+// Validar URL
 $urlValida = filter_var($site, FILTER_VALIDATE_URL) !== false;
 
-// Exemplo de filtro personalizado:
-// filter_var também aceita FILTER_CALLBACK para aplicar funções de validação próprias.
-
-// Função para aceitar apenas strings com letras e espaços:
+// Filtro personalizado:
 function apenasLetrasEspacos($valor)
 {
-    // Retorna o valor se contém só letras e espaços; false caso contrário.
     return preg_match('/^[\p{L}\s]+$/u', $valor) ? $valor : false;
 }
-
-// Usando FILTER_CALLBACK para rodar um filtro customizado:
 $nomeUsuario = "João da Silva";
-
 $usuarioValido = filter_var(
     $nomeUsuario,
     FILTER_CALLBACK,
     ["options" => "apenasLetrasEspacos"]
 );
-// $usuarioValido terá o valor válido ou false se não corresponder ao critério.
 
+// === 8. Info de Servidor e Navegação ===
 
-// Server info e navegaçao
-
-// Esta função identifica, de acordo com o servidor em que o sistema está rodando,
-// qual URL base utilizar — por exemplo, quando estamos desenvolvendo localmente ou
-// quando o código está em produção online. Isso é útil para garantir que as rotas 
-// funcionem corretamente em diferentes ambientes, sem codificar caminhos fixos.
 function getServerBaseUrl(): string
 {
-    // Pega o nome do servidor onde o PHP está rodando, por exemplo: "localhost" ou "meusite.com"
     $server = filter_input(INPUT_SERVER, "SERVER_NAME");
-
-    // Se estiver rodando localmente, usa a constante DEV_URL.
-    // Caso contrário, utiliza a URL definida para produção (PROD_URL).
     $env = $server == "localhost" ? DEV_URL : PROD_URL;
-
     return $env;
 }
 
-// Função responsável por criar um endereço absoluto para navegação no site.
-// Recebe um caminho (por ex: "/login" ou "dashboard"), adiciona a BASE_URL e garante que
-// não haja erro de concatenação de barras.
 function navigate(string $path): string
 {
     $server = getServerBaseUrl();
-
-    // Garante que o caminho sempre comece com "/", evitando erros de navegação.
     $sanitized_path = str_starts_with($path, "/") ? $path : "/$path";
-
-    // Concatena BASE_URL com o caminho, formando a URL absoluta do recurso desejado
     return $server . $sanitized_path;
 }
 
-// Arrays
-// Existem duas formas principais de criar arrays em PHP:
+// === 9. Arrays ===
 
-// 1) Utilizando a função array()
-// Essa é a forma tradicional, compatível com todas as versões do PHP.
+// Modo tradicional
 $months = array(
-    "Janeiro",
-    "Fevereiro",
-    "Março",
-    "Abril",
-    "Maio",
-    "Junho",
-    "Julho",
-    "Agosto",
-    "Setembro",
-    "Outubro",
-    "Novembro",
-    "Dezembro"
+    "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
+    "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 );
 
-// 2) Usando a sintaxe de colchetes []
-// Essa forma foi introduzida no PHP 5.4 e é mais curta e legível.
+// Forma moderna (a partir do PHP 5.4)
 $weekDays = [
-    1 => "Domingo", // chave => valor
+    1 => "Domingo",
     "Batatinha" => "Segunda",
     "Terça",
     "Quarta",
@@ -236,16 +195,71 @@ $weekDays = [
     "Sábado"
 ];
 
-var_dump($weekDays['Batatinha']); // pega o valor do indice batatinha
+var_dump($weekDays['Batatinha']);
 
-/*
- Diferenças principais:
- - array() funciona em todas as versões do PHP.
- - [] é suportado apenas a partir do PHP 5.4, sendo mais moderno e usual atualmente.
- Ambas as formas criam arrays equivalentes, a escolha depende da versão do PHP e preferência pessoal.
-*/
-
-// iteracoes em arrays
+// Iterando arrays
 foreach ($weekDays as $key => $value) {
     echo $key . " - " . $value . "<br>";
 }
+
+// === 10. Slug (URLs amigáveis) ===
+function slug($string) {
+    $string = mb_strtolower($string, 'UTF-8');
+    $string = preg_replace('/[áàãâä]/u', 'a', $string);
+    $string = preg_replace('/[éèêë]/u', 'e', $string);
+    $string = preg_replace('/[íìîï]/u', 'i', $string);
+    $string = preg_replace('/[óòõôö]/u', 'o', $string);
+    $string = preg_replace('/[úùûü]/u', 'u', $string);
+    $string = preg_replace('/[ç]/u', 'c', $string);
+    $string = preg_replace('/[^a-z0-9\s-]/', '', $string);
+    $string = preg_replace('/[\s-]+/', '-', $string);
+    $string = trim($string, '-');
+    return strip_tags($string);
+}
+
+$titulo = "<p>Olá Mundo! PHP é ótimo</p>";
+$slug = slug($titulo);
+echo "Slug: {$slug} <br>";
+
+// === 11. Estruturas de Repetição ===
+
+/*
+    Principais estruturas:
+    1. while
+    2. do...while
+    3. for
+    4. foreach
+*/
+
+// 1) while
+$contador = 0;
+while ($contador < 3) {
+    echo "While contador: $contador <br>";
+    $contador++;
+}
+
+// 2) do...while
+$contadorDo = 0;
+do {
+    echo "Do-While contador: $contadorDo <br>";
+    $contadorDo++;
+} while ($contadorDo < 3);
+
+// 3) for
+for ($i = 0; $i < 3; $i++) {
+    echo "For contador: $i <br>";
+}
+
+// 4) foreach
+$frutas = ['Maçã', 'Banana', 'Uva'];
+foreach ($frutas as $indice => $fruta) {
+    echo "Fruta [$indice]: $fruta <br>";
+}
+
+/*
+Resumo das diferenças:
+- while: repete enquanto condição for true (condição antes do bloco).
+- do...while: executa pelo menos uma vez (condição depois).
+- for: ideal quando o número de repetições é conhecido.
+- foreach: melhor para arrays/coleções.
+*/
