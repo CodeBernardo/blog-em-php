@@ -54,11 +54,12 @@ $float = 1.99;     // ponto flutuante
 $null = null;      // null
 var_dump($string); // debug: tipo e valor
 
+
 // === 4. Constantes ===
 define("FOO", "bar"); // Constante runtime
 echo FOO;
-$name = "exemplo";
-define("EXAMPLE", $name); // define é sempre global
+$nome = "exemplo";
+define("EXAMPLE", $nome); // define é sempre global
 const FOO2 = "Bar"; // Constante compilada
 
 // Resumo:
@@ -143,9 +144,11 @@ function validateEmail(string $email): bool
 $nomeLimpo = trim(strip_tags($nome));
 
 // Validar inteiro no intervalo
+$input = 34;
 $numero = filter_var($input, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 100]]);
 
 // Validar URL
+$site = 'http"//meusite.com';
 $urlValida = filter_var($site, FILTER_VALIDATE_URL) !== false;
 
 // Filtro personalizado:
@@ -153,6 +156,7 @@ function apenasLetrasEspacos($valor)
 {
     return preg_match('/^[\p{L}\s]+$/u', $valor) ? $valor : false;
 }
+
 $nomeUsuario = "João da Silva";
 $usuarioValido = filter_var(
     $nomeUsuario,
