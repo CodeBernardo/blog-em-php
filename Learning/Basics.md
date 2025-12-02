@@ -1,33 +1,35 @@
-<?php
-/**
- * ==========================================
- *         SUMÁRIO DAS LIÇÕES DE PHP
- * ==========================================
- * 
- * 1. Tipagem Estrita e Declarações Iniciais
- * 2. Sintaxe para Funções e Concatenamento de Strings
- * 3. Variáveis e Tipos de Dados Primitivos
- * 4. Constantes (define, const) – Características e Diferenças
- * 5. Estruturas Condicionais (if, switch, ternário, match)
- * 6. Operadores Lógicos e Tabela de Precedência
- * 7. Filtros de Validação e Sanitização (filter_var, callbacks)
- * 8. Informações do Servidor e Navegação (URL base, rotas)
- * 9. Arrays: Criação e Iteração (formas, foreach)
- * 10. Slugs: Como gerar e para que servem em URLs
- * 11. Estruturas de Repetição (while, do...while, for, foreach)
- * 
- * Cada tópico traz exemplos de código e explicações práticas!
- */
+# 📘 Sumário das Lições de PHP
 
-// === 1. Tipagem Estrita ===
-declare(strict_types=1); // tipagem forte, Default(0) ✔️ 
+1. **Tipagem Estrita e Declarações Iniciais**
+2. **Sintaxe para Funções e Concatenamento de Strings**
+3. **Variáveis e Tipos de Dados Primitivos**
+4. **Constantes (`define`, `const`) – Características e Diferenças**
+5. **Estruturas Condicionais (`if`, `switch`, ternário, `match`)**
+6. **Operadores Lógicos e Tabela de Precedência**
+7. **Filtros de Validação e Sanitização (`filter_var`, callbacks)**
+8. **Informações do Servidor e Navegação (URL base, rotas)**
+9. **Arrays: Criação e Iteração (formas, `foreach`)**
+10. **Slugs: Como gerar e para que servem em URLs**
+11. **Estruturas de Repetição (`while`, `do...while`, `for`, `foreach`)**
 
-use PSpell\Dictionary;
+_Cada tópico traz exemplos de código e explicações práticas!_
 
-// === 2. Funções e Concatenamento ===
+---
+
+## 1. Tipagem Estrita
+
+```php
+declare(strict_types=1); // Tipagem forte, Default(0) ✔️ 
+```
+
+---
+
+## 2. Funções e Concatenamento
+
+```php
 function concatString(string $param1, ?string $param2): string 
 {
-    // return $param1 . " " . $param2; // concatenançao de textos
+    // return $param1 . " " . $param2; // concatenanção de textos
 
     /*
         $mensagem = $param1;
@@ -36,7 +38,7 @@ function concatString(string $param1, ?string $param2): string
         return $mensagem;
     */ // alternativa com .=
 
-    //Interpolacao
+    // Interpolação
     return "$param1 $param2";
     // return "{$param1} {$param2}"; // Outra forma de interpolação
     // HEREDOC pode ser usado para textos longos/templates HTML
@@ -44,29 +46,45 @@ function concatString(string $param1, ?string $param2): string
     // <p>$param1 $param2</p>
     // HTML;
 }
+```
 
-// === 3. Variáveis e Tipos ===
-$variavel = "..."; // variavel
+---
+
+## 3. Variáveis e Tipos
+
+```php
+$variavel = "..."; // variável
 $string = "";      // string
 $int = 1;          // inteiro
 $bool = true;      // booleano
 $float = 1.99;     // ponto flutuante
 $null = null;      // null
 var_dump($string); // debug: tipo e valor
+```
 
+---
 
-// === 4. Constantes ===
+## 4. Constantes
+
+```php
 define("FOO", "bar"); // Constante runtime
 echo FOO;
 $nome = "exemplo";
 define("EXAMPLE", $nome); // define é sempre global
 const FOO2 = "Bar"; // Constante compilada
+```
 
-// Resumo:
-// - define(): qualquer ponto do código, valor dinâmico, mas não em classes.
-// - const: topo do código/classe, valor constante no momento de declaração.
+**Resumo:**
+- `define()`: qualquer ponto do código, valor dinâmico, mas não em classes.
+- `const`: topo do código/classe, valor constante no momento de declaração.
 
-// === 5. Estruturas Condicionais ===
+---
+
+## 5. Estruturas Condicionais
+
+### If-Else
+
+```php
 function saudacao(int $time): string
 {
     if ($time < 0 || $time > 23) {
@@ -80,8 +98,11 @@ function saudacao(int $time): string
     }
     return "Formato de hora inválido";
 }
+```
 
-// Switch
+### Switch
+
+```php
 function saudacaoSwitch(int $time): string
 {
     switch (true) {
@@ -97,8 +118,11 @@ function saudacaoSwitch(int $time): string
             return "Formato de hora inválido";
     }
 }
+```
 
-// Ternário
+### Ternário
+
+```php
 function saudacaoTernario(int $time): string
 {
     return ($time < 0 || $time > 23) ? "Formato de hora inválido" :
@@ -106,8 +130,11 @@ function saudacaoTernario(int $time): string
             (($time > 12 && $time <= 19) ? "Boa Tarde!" :
                 ((($time >= 0 && $time < 5) || ($time >= 20 && $time <= 23)) ? "Boa Noite!" : "Formato de hora inválido")));
 }
+```
 
-// Match (PHP 8+)
+### Match (PHP 8+)
+
+```php
 function saudacaoMatch(int $time): string
 {
     return match (true) {
@@ -118,40 +145,62 @@ function saudacaoMatch(int $time): string
         default => "Formato de hora inválido",
     };
 }
+```
 
-// === 6. Operadores Lógicos (Tabela) ===
-//
-// | Operador | Nome | Precedência | Uso               | Observação                                                  |
-// |----------|------|-------------|-------------------|-------------------------------------------------------------|
-// | &&       | AND  | Alta        | Mais comum        | Avalia ambos os lados sempre.                               |
-// | and      | AND  | Baixa       | Controle de fluxo | Precedência baixa; cuidado com atribuições condicionais.    |
-// | ||       | OR   | Alta        | Mais comum        | Usa para testar pelo menos uma condição.                    |
-// | or       | OR   | Baixa       | Controle de fluxo | Cuidado em atribuições, preferência para && e ||.           |
-// | xor      | XOR  | Média       | Pouco usado       | Verdadeiro se apenas um lado for verdadeiro.                |
-// | !        | NOT  | Alta        | Negação           | Inverte o valor lógico da expressão.                        |
-// 
-// *Atenção à ordem de avaliação: use parênteses para garantir o resultado esperado!*
+---
 
-// === 7. Filtros de Validação e Sanitização ===
+## 6. Operadores Lógicos (Tabela)
 
-// Validar e-mail
+| Operador | Nome | Precedência | Uso               | Observação                                                  |
+|----------|------|-------------|-------------------|-------------------------------------------------------------|
+| `&&`     | AND  | Alta        | Mais comum        | Avalia ambos os lados sempre.                               |
+| `and`    | AND  | Baixa       | Controle de fluxo | Precedência baixa; cuidado com atribuições condicionais.    |
+| `||`     | OR   | Alta        | Mais comum        | Usa para testar pelo menos uma condição.                    |
+| `or`     | OR   | Baixa       | Controle de fluxo | Cuidado em atribuições, preferência para && e \|\|.           |
+| `xor`    | XOR  | Média       | Pouco usado       | Verdadeiro se apenas um lado for verdadeiro.                |
+| `!`      | NOT  | Alta        | Negação           | Inverte o valor lógico da expressão.                        |
+
+> **Atenção à ordem de avaliação:**  
+> Use parênteses para garantir o resultado esperado!
+
+---
+
+## 7. Filtros de Validação e Sanitização
+
+### Validar e-mail
+
+```php
 function validateEmail(string $email): bool
 {
     return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 }
+```
 
-// Exemplo de sanitização (o FILTER_SANITIZE_STRING está deprecated):
+### Exemplo de sanitização
+
+> **Obs:** `FILTER_SANITIZE_STRING` está depreciado.
+
+```php
 $nomeLimpo = trim(strip_tags($nome));
+```
 
-// Validar inteiro no intervalo
+### Validar inteiro no intervalo
+
+```php
 $input = 34;
 $numero = filter_var($input, FILTER_VALIDATE_INT, ["options" => ["min_range" => 1, "max_range" => 100]]);
+```
 
-// Validar URL
+### Validar URL
+
+```php
 $site = 'http"//meusite.com';
 $urlValida = filter_var($site, FILTER_VALIDATE_URL) !== false;
+```
 
-// Filtro personalizado:
+### Filtro personalizado
+
+```php
 function apenasLetrasEspacos($valor)
 {
     return preg_match('/^[\p{L}\s]+$/u', $valor) ? $valor : false;
@@ -163,9 +212,13 @@ $usuarioValido = filter_var(
     FILTER_CALLBACK,
     ["options" => "apenasLetrasEspacos"]
 );
+```
 
-// === 8. Info de Servidor e Navegação ===
+---
 
+## 8. Informações do Servidor e Navegação
+
+```php
 function getServerBaseUrl(): string
 {
     $server = filter_input(INPUT_SERVER, "SERVER_NAME");
@@ -179,16 +232,24 @@ function navigate(string $path): string
     $sanitized_path = str_starts_with($path, "/") ? $path : "/$path";
     return $server . $sanitized_path;
 }
+```
 
-// === 9. Arrays ===
+---
 
-// Modo tradicional
+## 9. Arrays
+
+### Modo tradicional
+
+```php
 $months = array(
     "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
 );
+```
 
-// Forma moderna (a partir do PHP 5.4)
+### Forma moderna (a partir do PHP 5.4)
+
+```php
 $weekDays = [
     1 => "Domingo",
     "Batatinha" => "Segunda",
@@ -200,13 +261,21 @@ $weekDays = [
 ];
 
 var_dump($weekDays['Batatinha']);
+```
 
-// Iterando arrays
+### Iterando arrays
+
+```php
 foreach ($weekDays as $key => $value) {
     echo $key . " - " . $value . "<br>";
 }
+```
 
-// === 10. Slug (URLs amigáveis) ===
+---
+
+## 10. Slug (URLs amigáveis)
+
+```php
 function slug($string) {
     $string = mb_strtolower($string, 'UTF-8');
     $string = preg_replace('/[áàãâä]/u', 'a', $string);
@@ -224,17 +293,19 @@ function slug($string) {
 $titulo = "<p>Olá Mundo! PHP é ótimo</p>";
 $slug = slug($titulo);
 echo "Slug: {$slug} <br>";
+```
 
-// === 11. Estruturas de Repetição ===
+---
 
-/*
-    Principais estruturas:
-    1. while
-    2. do...while
-    3. for
-    4. foreach
-*/
+## 11. Estruturas de Repetição
 
+**Principais estruturas:**
+1. `while`
+2. `do...while`
+3. `for`
+4. `foreach`
+
+```php
 // 1) while
 $contador = 0;
 while ($contador < 3) {
@@ -259,11 +330,11 @@ $frutas = ['Maçã', 'Banana', 'Uva'];
 foreach ($frutas as $indice => $fruta) {
     echo "Fruta [$indice]: $fruta <br>";
 }
+```
 
-/*
-Resumo das diferenças:
-- while: repete enquanto condição for true (condição antes do bloco).
-- do...while: executa pelo menos uma vez (condição depois).
-- for: ideal quando o número de repetições é conhecido.
-- foreach: melhor para arrays/coleções.
-*/
+**Resumo das diferenças:**
+- `while`: repete enquanto condição for true (condição antes do bloco).
+- `do...while`: executa pelo menos uma vez (condição depois).
+- `for`: ideal quando o número de repetições é conhecido.
+- `foreach`: melhor para arrays/coleções.
+
