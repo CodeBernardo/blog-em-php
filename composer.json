@@ -4,7 +4,8 @@
     "autoload": {
         "psr-4": {
             "system\\": "system/"
-        }
+        },
+        "files": ["system/config.php"]
     },
     "authors": [
         {
@@ -13,5 +14,9 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {
+        "php": ">=8.0",
+        "erusev/parsedown": "dev-master",
+        "scrivo/highlight.php": "^10.0@dev"
+    }
 }
