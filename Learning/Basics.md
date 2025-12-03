@@ -1,20 +1,4 @@
-# 📘 Sumário das Lições de PHP
-
-1. **Tipagem Estrita e Declarações Iniciais**
-2. **Sintaxe para Funções e Concatenamento de Strings**
-3. **Variáveis e Tipos de Dados Primitivos**
-4. **Constantes (`define`, `const`) – Características e Diferenças**
-5. **Estruturas Condicionais (`if`, `switch`, ternário, `match`)**
-6. **Operadores Lógicos e Tabela de Precedência**
-7. **Filtros de Validação e Sanitização (`filter_var`, callbacks)**
-8. **Informações do Servidor e Navegação (URL base, rotas)**
-9. **Arrays: Criação e Iteração (formas, `foreach`)**
-10. **Slugs: Como gerar e para que servem em URLs**
-11. **Estruturas de Repetição (`while`, `do...while`, `for`, `foreach`)**
-
-_Cada tópico traz exemplos de código e explicações práticas!_
-
----
+# 📘 PHP Basics
 
 ## 1. Tipagem Estrita
 
@@ -27,21 +11,28 @@ declare(strict_types=1); // Tipagem forte, Default(0) ✔️
 ## 2. Funções e Concatenamento
 
 ```php
+/**
+ * Concatena duas strings com espaço entre elas.
+ * Se o segundo parâmetro for nulo, apenas o primeiro é retornado.
+ */
 function concatString(string $param1, ?string $param2): string 
 {
-    // return $param1 . " " . $param2; // concatenanção de textos
+    // Forma simples usando interpolação, evitando espaços extras se $param2 for nulo
+    return $param2 !== null ? "$param1 $param2" : $param1;
+
+    // Outras formas equivalentes:
+    // return $param1 . ($param2 !== null ? " $param2" : "");
 
     /*
-        $mensagem = $param1;
-        $mensagem .= " ";
-        $mensagem .= $param2;
-        return $mensagem;
-    */ // alternativa com .=
+    // Alternativa detalhada com .=
+    $mensagem = $param1;
+    if ($param2 !== null) {
+        $mensagem .= " " . $param2;
+    }
+    return $mensagem;
+    */
 
-    // Interpolação
-    return "$param1 $param2";
-    // return "{$param1} {$param2}"; // Outra forma de interpolação
-    // HEREDOC pode ser usado para textos longos/templates HTML
+    // HEREDOC pode ser usado para textos longos/templates HTML:
     // return <<<HTML
     // <p>$param1 $param2</p>
     // HTML;

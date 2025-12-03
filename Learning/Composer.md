@@ -1,4 +1,4 @@
-# Composer: Gerenciador de Dependências em PHP
+# 📚 Composer
 
 O **Composer** é um gerenciador de dependências para projetos PHP. Ele permite declarar, instalar e atualizar facilmente as bibliotecas das quais o seu projeto depende, facilitando a organização e manutenção das dependências de terceiros.
 
@@ -10,6 +10,7 @@ O **Composer** é um gerenciador de dependências para projetos PHP. Ele permite
 - Controla versões dos pacotes, evitando conflitos de dependências
 - Utiliza o arquivo `composer.json` para gerenciar informações e dependências do projeto
 - Permite o autoload automático de classes via PSR-4 ou outras especificações
+- Permite o autoload automático de arquivos (constantes, funções globais, configurações) usando a opção `"files"`
 
 ---
 
@@ -74,7 +75,55 @@ composer dump-autoload
 
 ---
 
-### 4. Como usar o autoload no seu código
+### 4. Autoload de arquivos (constantes e funções)
+
+O autoload PSR-4 carrega apenas **classes** automaticamente. Para carregar arquivos que contêm **constantes**, **funções globais** ou **configurações**, você precisa usar a opção `"files"` no `composer.json`.
+
+**Exemplo de configuração:**
+
+```json
+"autoload": {
+    "psr-4": {
+        "system\\": "system/"
+    },
+    "files": ["system/config.php"]
+}
+```
+
+**Como funciona:**
+
+1. Quando você inclui `vendor/autoload.php`, o Composer automaticamente carrega todos os arquivos listados em `"files"`.
+2. Isso é útil para arquivos que definem constantes (usando `define()`) ou funções globais que precisam estar disponíveis em todo o projeto.
+3. Após adicionar ou modificar a configuração `"files"`, sempre execute:
+   ```bash
+   composer dump-autoload
+   ```
+
+**Exemplo prático:**
+
+Se você tem um arquivo `system/config.php` com constantes:
+```php
+<?php 
+define("DEV_URL", "http://localhost/blog"); 
+define("PROD_URL", "https://Tech/blog"); 
+```
+
+E o `composer.json` está configurado com `"files": ["system/config.php"]`, então ao incluir `vendor/autoload.php`, as constantes estarão automaticamente disponíveis:
+
+```php
+require 'vendor/autoload.php';
+// Agora PROD_URL e DEV_URL estão disponíveis sem precisar de require manual
+echo PROD_URL;
+```
+
+**Importante:** 
+- O autoload PSR-4 **não carrega constantes**, apenas classes
+- Use `"files"` para carregar arquivos que definem constantes, funções ou configurações
+- Sempre execute `composer dump-autoload` após modificar a configuração de autoload
+
+---
+
+### 5. Como usar o autoload no seu código
 
 Antes de utilizar as classes do seu projeto, inclua a linha:
 ```php
@@ -84,7 +133,7 @@ Isso faz com que todas as classes cadastradas no autoload do Composer sejam carr
 
 ---
 
-### 5. Instalação de dependências de terceiros
+### 6. Instalação de dependências de terceiros
 
 Para instalar algum pacote (por exemplo, `monolog/monolog`), use:
 ```bash
@@ -94,7 +143,49 @@ O Composer irá adicionar o pacote ao `composer.json` e baixá-lo automaticament
 
 ---
 
-### 6. Modo de desenvolvimento
+### 7. Instalação, remoção e uso de pacotes
+
+O Composer facilita não só a instalação, mas também a remoção e o uso de pacotes em seu projeto.
+
+#### Instalar um pacote
+
+Para instalar um pacote, utilize o comando:
+
+```bash
+composer require nome/da-biblioteca
+```
+
+Exemplo:
+```bash
+composer require phpmailer/phpmailer
+```
+
+#### Remover um pacote
+
+Para remover um pacote (por exemplo, `phpmailer/phpmailer`), execute:
+
+```bash
+composer remove phpmailer/phpmailer
+```
+
+Isso atualizará o arquivo `composer.json` e removerá a dependência automaticamente do projeto.
+
+#### Usar um pacote no seu código
+
+Depois de instalar, basta garantir a presença do autoload:
+
+```php
+require 'vendor/autoload.php';
+
+// Agora você pode instanciar classes do pacote instalado:
+$mail = new PHPMailer\PHPMailer\PHPMailer();
+```
+
+**Dica:** Consulte a documentação da biblioteca para exemplos de uso e namespaces específicos.
+
+---
+
+### 8. Modo de desenvolvimento
 
 Durante o desenvolvimento, execute o comando abaixo sempre que alterar o `composer.json` ou quiser atualizar dependências:
 
@@ -105,7 +196,7 @@ composer update     # atualiza as dependências existentes
 
 ---
 
-### 7. Repositório de dependências
+### 9. Repositório de dependências
 
 Os pacotes baixados pelo Composer ficam na pasta `vendor/`.  
 **Não altere arquivos dessa pasta manualmente.**

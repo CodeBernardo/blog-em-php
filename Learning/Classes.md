@@ -1,4 +1,4 @@
-# Namespaces em PHP
+# 🗃️ Classes 
 
 ## Exemplos de como usar namespaces em PHP
 
